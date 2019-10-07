@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title></title>
+        <meta name="description" content="">
+        <link rel="stylesheet" href="app.css" />
+        <script defer src="app.js"></script>
+    </head>
+    <body>
+        <div id="scene" class="scene">
+            <p class="score">Score: <span id="score">0</span></p>
+
+            <svg id="clouds" class="clouds" viewbox="0 0 250 100">
+                <g class="cloud">
+                    <circle cx="68" cy="35" r="11" fill="#f1f1f1"/>
+                    <circle cx="80" cy="34" r="15" fill="#f4f4f4"/>
+                    <circle cx="90" cy="40" r="10" fill="#fcf7ff"/>
+                </g>
+                <g class="cloud">
+                    <circle cx="188" cy="80" r="10" fill="#f1f1f1"/>
+                    <circle cx="200" cy="74" r="15" fill="#f4f4f4"/>
+                    <circle cx="210" cy="75" r="11" fill="#fcf7ff"/>
+                </g>
+            </svg>
+
+            <svg id="landscape" class="landscape" viewbox="0 0 400 200">
+                <rect x="0" y="0" width="50" height="200" fill="#6E8C02" />
+                <rect x="50" y="100" width="100" height="100" fill="#F2CA04" />
+                <rect x="150" y="50" width="75" height="150" fill="#F2DB98" />
+                <rect x="225" y="125" width="125" height="75" fill="#F26B1D" />
+                <rect x="350" y="25" width="50" height="175" fill="#D82717" />
+            </svg>
+
+            <div id="obstacle">
+                <svg>
+                    <g>
+                        <rect id="svg_40" height="0.190476" width="0" y="102.083333" x="91.904762" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#ff0000"/>
+                        <g stroke="null" transform="rotate(-91 49.999996185302734,48.28294372558594) " id="svg_47">
+                            <rect stroke="#000" rx="2" id="svg_6" height="80.988244" width="76.354815" y="7.72481" x="7.583925" stroke-opacity="null" stroke-width="0.4" fill="#ff0000"/>
+                            <ellipse stroke="#000" ry="6.905791" rx="1.703454" id="svg_11" cy="14.687149" cx="8.786361" stroke-opacity="null" stroke-width="0.2" fill="#ffe377"/>
+                            <line stroke="#000" id="svg_19" y2="20.878549" x2="83.237321" y1="21.592941" x1="7.483719" stroke-opacity="null" stroke-width="0.4" fill="none"/>
+                            <ellipse stroke="#000" ry="6.42953" rx="0.501015" id="svg_20" cy="14.44902" cx="83.537929" stroke-opacity="null" stroke-width="0.4" fill="#ff0000"/>
+                            <ellipse stroke="#000" ry="6.905791" rx="1.703454" id="svg_22" cy="28.260601" cx="8.646077" stroke-opacity="null" stroke-width="0.2" fill="#ffe377"/>
+                            <line stroke="#000" id="svg_24" y2="34.21387" x2="83.638134" y1="34.928262" x1="7.884532" stroke-opacity="null" stroke-width="0.4" fill="none"/>
+                            <ellipse stroke="#000" ry="6.42953" rx="0.501015" id="svg_25" cy="27.951034" cx="83.678213" stroke-opacity="null" stroke-width="0.4" fill="#ff0000"/>
+                            <ellipse stroke="#000" ry="6.905791" rx="1.703454" id="svg_26" cy="41.762615" cx="8.786361" stroke-opacity="null" stroke-width="0.2" fill="#ffe377"/>
+                            <line stroke="#000" id="svg_27" y2="47.715885" x2="83.778419" y1="48.430277" x1="8.024817" stroke-opacity="null" stroke-width="0.4" fill="none"/>
+                            <ellipse stroke="#000" ry="6.42953" rx="0.501015" id="svg_28" cy="41.286358" cx="83.678213" stroke-opacity="null" stroke-width="0.4" fill="#ff0000"/>
+                            <ellipse stroke="#000" ry="6.905791" rx="1.703454" id="svg_29" cy="55.097939" cx="8.786361" stroke-opacity="null" stroke-width="0.2" fill="#ffe377"/>
+                            <line stroke="#000" id="svg_30" y2="61.051208" x2="83.778419" y1="61.7656" x1="8.024817" stroke-opacity="null" stroke-width="0.4" fill="none"/>
+                            <ellipse stroke="#000" ry="6.42953" rx="0.501015" id="svg_31" cy="54.45499" cx="83.537929" stroke-opacity="null" stroke-width="0.4" fill="#ff0000"/>
+                            <ellipse stroke="#000" ry="6.905791" rx="1.703454" id="svg_32" cy="68.266571" cx="8.646077" stroke-opacity="null" stroke-width="0.2" fill="#ffe377"/>
+                            <line stroke="#000" id="svg_33" y2="74.21984" x2="83.638134" y1="74.934232" x1="7.884532" stroke-opacity="null" stroke-width="0.4" fill="none"/>
+                            <ellipse stroke="#000" ry="6.42953" rx="0.501015" id="svg_34" cy="68.123696" cx="83.678213" stroke-opacity="null" stroke-width="0.4" fill="#ff0000"/>
+                            <ellipse stroke="#000" ry="6.905791" rx="1.703454" id="svg_35" cy="81.935277" cx="8.786361" stroke-opacity="null" stroke-width="0.2" fill="#ffe377"/>
+                            <ellipse stroke="#000" ry="6.42953" rx="0.501015" id="svg_37" cy="68.123696" cx="83.678213" stroke-opacity="null" stroke-width="0.4" fill="#ff0000"/>
+                            <ellipse stroke="#000" ry="6.42953" rx="0.501015" id="svg_38" cy="81.45902" cx="83.678213" stroke-opacity="null" stroke-width="0.4" fill="#ff0000"/>
+                            <rect stroke="#000" id="svg_39" height="1.190657" width="8.817904" y="13.496392" x="83.437838" stroke-opacity="null" stroke-width="0" fill="#ffffff"/>
+                            <rect stroke="#000" id="svg_41" height="1.190657" width="8.817904" y="27.069883" x="83.838652" stroke-opacity="null" stroke-width="0" fill="#ffffff"/>
+                            <rect stroke="#000" id="svg_42" height="1.190657" width="8.817904" y="39.928981" x="84.239466" stroke-opacity="null" stroke-width="0" fill="#ffffff"/>
+                            <rect stroke="#000" id="svg_43" height="1.190657" width="8.817904" y="53.264341" x="84.039059" stroke-opacity="null" stroke-width="0" fill="#ffffff"/>
+                            <rect stroke="#000" id="svg_44" height="1.190657" width="8.817904" y="66.599702" x="84.239466" stroke-opacity="null" stroke-width="0" fill="#ffffff"/>
+                            <rect stroke="#000" id="svg_45" height="1.190657" width="8.817904" y="66.599702" x="84.239466" stroke-opacity="null" stroke-width="0" fill="#ffffff"/>
+                            <rect stroke="#000" id="svg_46" height="1.190657" width="8.817904" y="80.411325" x="84.039059" stroke-opacity="null" stroke-width="0" fill="#ffffff"/>
+                        </g>
+                    </g>
+                </svg>
+            </div>
+
+            <svg id="player" class="player" viewbox="0 0 30 30">
+                <circle cx="15" cy="15" r="15" fill="#FFF"/>
+            </svg>
+
+            <p id="game-over" class="game-over hidden">Game Over!<small>Press Enter to Restart</small></p>
+        </div>
+    </body>
+</html>

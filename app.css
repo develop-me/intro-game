@@ -1,0 +1,85 @@
+body {
+    background:
+        linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
+        linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0,
+        linear-gradient(27deg, #222 5px, transparent 5px) 0 10px,
+        linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
+        linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
+        linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
+    background-color: #131313;
+    background-size: 20px 20px;
+}
+
+.scene {
+    background-image: linear-gradient(#144d99, #0081cf 300px, #444443 300px);
+    margin: 2em auto;
+    overflow: hidden;
+    position: relative;
+}
+
+.score {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+    color: #333;
+    font-family: monospace;
+    font-size: 18px;
+    margin: 0;
+    padding: 10px;
+    position: absolute;
+    right: 1em;
+    top: 1em;
+    z-index: 4;
+}
+
+.score span {
+    color: #555;
+    font-weight: 300;
+}
+
+.bounding-box {
+    border: 1px solid rgba(255, 0, 60, 0.8);
+    box-sizing: border-box;
+    position: absolute;
+    z-index: 5;
+}
+
+svg {
+    position: absolute;
+}
+
+.clouds {
+    z-index: 0;
+}
+
+.landscape {
+    top: 100px;
+    z-index: 1;
+}
+
+.player {
+    z-index: 2;
+}
+
+.obstacle {
+    z-index: 3;
+}
+
+.game-over {
+    color: hotpink;
+    font-family: monospace;
+    font-weight: bold;
+    margin: 0;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    z-index: 6;
+}
+
+.game-over small {
+    display: block;
+    font-size: 20px;
+}
+
+.hidden {
+    display: none;
+}
