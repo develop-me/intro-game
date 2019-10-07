@@ -29,8 +29,6 @@
     const landscapeSpeed = 50; // pixels per second
     const cloudsSpeed = 30; // pixels per second
 
-    const gameOverHeight = 60; // pixels
-
     /* svg */
     const shapes = ["rect", "circle", "ellipse", "line", "polyline", "polygon", "path"];
 
@@ -151,8 +149,7 @@
     const scoreEl = d.getElementById("score");
 
     const gameOverEl = d.getElementById("game-over");
-    gameOverEl.style.fontSize = gameOverHeight + "px";
-    gameOverEl.style.top = ((height / 2) - (gameOverHeight / 2)) + "px";
+    const introEl = d.getElementById("intro");
 
 
     /* initial state */
@@ -312,6 +309,9 @@
         // game over when started is false and score is not 0
         const method = (!state.started && state.score !== 0) ? "remove" : "add";
         gameOverEl.classList[method]("hidden");
+
+        const imethod = (!state.started && state.score === 0) ? "remove" : "add";
+        introEl.classList[imethod]("hidden");
 
         // show bounding boxes
         if (SHOW_BOUNDING_BOXES) {

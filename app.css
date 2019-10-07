@@ -8,6 +8,7 @@ body {
         linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
     background-color: #131313;
     background-size: 20px 20px;
+    font-family: monospace;
 }
 
 .scene {
@@ -21,7 +22,6 @@ body {
     background: rgba(255, 255, 255, 0.5);
     border-radius: 5px;
     color: #333;
-    font-family: monospace;
     font-size: 18px;
     margin: 0;
     padding: 10px;
@@ -64,13 +64,29 @@ svg {
     z-index: 3;
 }
 
-.game-over {
-    color: hotpink;
-    font-family: monospace;
+.intro {
+    background: rgba(255, 255, 255, 0.8);
+    font-size: 21px;
     font-weight: bold;
     margin: 0;
+    padding: 1em 0;
     position: absolute;
     text-align: center;
+    top: 120px;
+    width: 100%;
+    z-index: 6;
+}
+
+.game-over {
+    background: rgba(255, 255, 255, 0.8);
+    color: red;
+    font-size: 60px;
+    font-weight: bold;
+    margin: 0;
+    padding: 1em 0;
+    position: absolute;
+    text-align: center;
+    top: 100px;
     width: 100%;
     z-index: 6;
 }
