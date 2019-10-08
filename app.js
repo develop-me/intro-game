@@ -1,6 +1,6 @@
 ((d) => {
     /* debugging */
-    const SHOW_BOUNDING_BOXES = false;
+    const DEBUG = false;
 
     /* difficulty */
     const speed = 250; // pixels per second
@@ -88,6 +88,10 @@
     sceneEl.style.height = `${height}px`;
     sceneEl.style.width = `${width}px`;
 
+    if (DEBUG) {
+        sceneEl.style.overflow = "visible";
+    }
+
     // create landscape tiles
     const landscapePositions = range(0, Math.ceil(width / landscapeWidth) + 1).map(i => i * landscapeWidth);
     const landscapes = clone(d.getElementById("landscape"), landscapePositions);
@@ -150,7 +154,7 @@
     // obstacle bounding boxes
     const obstacleBBs = obstaclePositions.map(ob => ob.boxes.map(() => {
         // only add if debugging
-        if (SHOW_BOUNDING_BOXES) {
+        if (DEBUG) {
             const el = d.createElement("div");
             el.classList.add("bounding-box");
             fragment.append(el);
@@ -169,7 +173,7 @@
     const playerElBB = d.createElement("div");
 
     // only add if debugging
-    if (SHOW_BOUNDING_BOXES) {
+    if (DEBUG) {
         playerElBB.classList.add("bounding-box");
         fragment.append(playerElBB);
     }
@@ -388,7 +392,7 @@
 
     const renderBoundingBoxes = state => {
         // show bounding boxes
-        if (SHOW_BOUNDING_BOXES) {
+        if (DEBUG) {
             // move player bounding box
             Object.assign(playerElBB.style, {
                 transform: translate(state.player.left, state.player.top),

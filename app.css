@@ -38,7 +38,7 @@ body {
 }
 
 .bounding-box {
-    border: 1px solid rgba(255, 0, 60, 0.8);
+    border: 3px solid rgba(70, 255, 0, 0.8);
     box-sizing: border-box;
     position: absolute;
     z-index: 5;
