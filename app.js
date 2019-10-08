@@ -384,7 +384,8 @@
         store.dispatch({ type: "cancelJump" });
     };
 
-    const down = () => {
+    const down = e => {
+        e.preventDefault();
         store.dispatch({ type: "jump" });
     };
 
