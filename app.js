@@ -379,30 +379,33 @@
 
 
     /* keyboard events */
+    const up = () => {
+        store.dispatch({ type: "start" });
+        store.dispatch({ type: "cancelJump" });
+    };
+
+    const down = () => {
+        store.dispatch({ type: "jump" });
+    };
+
     window.addEventListener("keyup", e => {
         switch (e.key) {
             case "Escape": store.dispatch({ type: "reset" }); break;
-            case " ":
-                store.dispatch({ type: "start" });
-                store.dispatch({ type: "cancelJump" });
-                break;
+            case " ": up(); break;
         }
     });
 
     window.addEventListener("keydown", e => {
         switch (e.key) {
-            case " ": store.dispatch({ type: "jump" }); break;
+            case " ": down(); break;
         }
     });
 
-    window.addEventListener("mouseup", () => {
-        store.dispatch({ type: "start" });
-        store.dispatch({ type: "cancelJump" });
-    });
+    window.addEventListener("mousedown", down);
+    window.addEventListener("mouseup", up);
 
-    window.addEventListener("mousedown", () => {
-        store.dispatch({ type: "jump" });
-    });
+    window.addEventListener("touchstart", down);
+    window.addEventListener("touchend", up);
 
 
     /* getting things started */
