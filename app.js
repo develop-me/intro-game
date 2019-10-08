@@ -294,7 +294,7 @@
     /* render */
     const translate = (x, y) => `translate3d(${x}px, ${y}px, 0)`; // use translate3d to get GPU rendering
 
-    const render = state => {
+    const renderMovement = state => {
         scoreEl.textContent = state.score.toLocaleString();
         playerEl.style.transform = translate(state.player.left, state.player.top);
 
@@ -309,14 +309,9 @@
         obstacles.forEach((el, i) => {
             el.style.transform = translate(state.obstacles[i].left, 0);
         });
+    };
 
-        // game over when started is false and score is not 0
-        const method = (!state.started && state.score !== 0) ? "remove" : "add";
-        gameOverEl.classList[method]("hidden");
-
-        const imethod = (!state.started && state.score === 0) ? "remove" : "add";
-        introEl.classList[imethod]("hidden");
-
+    const renderBoundingBoxes = state => {
         // show bounding boxes
         if (SHOW_BOUNDING_BOXES) {
             Object.assign(playerElBB.style, {
@@ -338,6 +333,28 @@
             });
         }
     };
+
+    const render = (() => {
+        let lastScore = null;
+        let lastStarted = null;
+
+        return state => {
+            if (state.score !== lastScore || state.started !== lastStarted) {
+                renderMovement(state);
+                renderBoundingBoxes(state);
+
+                // game over when started is false and score is not 0
+                const method = (!state.started && state.score !== 0) ? "remove" : "add";
+                gameOverEl.classList[method]("hidden");
+
+                const imethod = (!state.started && state.score === 0) ? "remove" : "add";
+                introEl.classList[imethod]("hidden");
+            }
+
+            lastScore = state.score;
+            lastStarted = state.started;
+        };
+    })();
 
     store.subscribe(render);
 
