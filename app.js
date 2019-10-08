@@ -120,13 +120,16 @@
     const boxes = Array.from(obstacleEl.querySelectorAll(shapes.join(","))).map(el => el.getBBox());
 
     // generates the correct number of obstacle positions
-    const obRange = range(0, Math.ceil(width / minObstacleDistance)); // number of obstacles
+    const obRange = range(1, Math.ceil(width / minObstacleDistance)); // number of obstacles
 
     // tracks the left of the obstacle and all the bounding boxes for collision detection
     const nextLeft = lefts => lefts.concat(nextPos(last(lefts))); // add a new left value
 
     const generateObstaclePositions = () => obRange.reduce(nextLeft, [obstacleXOffset]).map(left => ({
         left,
+        right: left + obstacleWidth,
+        top: obstacleYOffset,
+        bottom: obstacleYOffset + obstacleHeight,
         boxes: boxes.map(({ x, y, height, width }) => ({
             top: obstacleYOffset + y,
             left: left + x,
@@ -225,6 +228,15 @@
         return state;
     };
 
+    /*
+     * All of the "tick" related code runs 60 times a second
+     * As such it needs to run as quickly as possible
+     * It should also avoid creating new objects, arrays, functions as these will need
+     * to be garbage-collected at some point
+     * As such, rather than using nice array-iterator methods, we'll be using
+     * a for loop for any looping behaviour. This makes the code less nice to look at
+     * but should be a bit better for performance
+     */
     const jumpTick = (multiplier, state) => {
         // work out current player position
         // make sure it stops when they hit the ground
@@ -242,29 +254,32 @@
 
     const landscapeTick = (multiplier, state) => {
         // move each landscape element leftwards
-        state.landscapes.forEach((_, i) => { // forEach to avoid gc
+        for (let i = 0; i < state.landscapes.length; i += 1) { // for loop to avoid gc
             const pos = state.landscapes[i] - (landscapeSpeed * multiplier);
             // wrap around if off-left
             state.landscapes[i] = pos < -landscapeWidth ? pos + (state.landscapes.length * landscapeWidth) : pos;
-        });
+        }
 
         return state;
     };
 
     const cloudsTick = (multiplier, state) => {
         // move each cloud leftwards
-        state.clouds.forEach((_, i) => { // forEach to avoid gc
+        for (let i = 0; i < state.clouds.length; i += 1) { // for loop to avoid gc
             const pos = state.clouds[i] - (cloudsSpeed * multiplier);
             // wrap around if off-left
             state.clouds[i] = pos < -cloudsWidth ? pos + (state.clouds.length * cloudsWidth) : pos;
-        });
+        }
 
         return state;
     };
 
     const obstaclesTick = (multiplier, state) => {
         // move each obstacle
-        state.obstacles.forEach((o, i) => { // forEach to avoid gc
+        for (let i = 0; i < state.obstacles.length; i += 1) { // for loop to avoid gc
+            // get obstacle
+            const o = state.obstacles[i];
+
             // change in left
             const dl = speed * multiplier;
 
@@ -278,13 +293,14 @@
 
             // update obstacle
             o.left += offset;
+            o.right += offset;
 
             // update bounding boxes
-            o.boxes.forEach((_, i) => { // forEach to avoid gc
-                o.boxes[i].left += offset;
-                o.boxes[i].right += offset;
-            });
-        });
+            for (let j = 0; j < o.boxes.length; j += 1) { // for loop to avoid gc
+                o.boxes[j].left += offset;
+                o.boxes[j].right += offset;
+            }
+        }
 
         return state;
     };
@@ -292,10 +308,20 @@
     const collisionsTick = state => {
         // check if there are any collisions
         // if any obstacles' boxes collide with the player, then game over
-        const gameOver = state.obstacles.some(ob => ob.boxes.some(box => collision(state.player, box)));
-
-        if (gameOver) {
-            state.started = false;
+        // would be nice to use state.obstacles.some(ob => ob.boxes.some(box => collision(state.player, box)))
+        // but that would create a lot of anonymous functions for gc to deal with
+        for (let i = 0; i < state.obstacles.length; i += 1) {
+            // check if there's overlap with entire obstacle box
+            // if not, no point checking the boxes
+            if (collision(state.player, state.obstacles[i])) {
+                // if does collide with obstacle box then check if it actually collides
+                // with any of the boxes
+                for (let j = 0; j < state.obstacles[i].boxes.length; j += 1) {
+                    if (collision(state.player, state.obstacles[i].boxes[j])) {
+                        state.started = false;
+                    }
+                }
+            }
         }
 
         return state;
@@ -375,45 +401,45 @@
         playerEl.style.transform = translate(state.player.left, state.player.top);
 
         // move obstacles
-        obstacles.forEach((el, i) => {
-            el.style.transform = translate(state.obstacles[i].left, 0);
-        });
+        for (let i = 0; i < obstacles.length; i += 1) { // for loop to avoid gc
+            obstacles[i].style.transform = translate(state.obstacles[i].left, 0);
+        }
 
         // move buildings
-        landscapes.forEach((el, i) => {
-            el.style.transform = translate(state.landscapes[i], 0);
-        });
+        for (let i = 0; i < landscapes.length; i += 1) { // for loop to avoid gc
+            landscapes[i].style.transform = translate(state.landscapes[i], 0);
+        }
 
         // move clouds
-        clouds.forEach((el, i) => {
-            el.style.transform = translate(state.clouds[i], 0);
-        });
+        for (let i = 0; i < clouds.length; i += 1) { // for loop to avoid gc
+            clouds[i].style.transform = translate(state.clouds[i], 0);
+        }
     };
 
+    // show bounding boxes
     const renderBoundingBoxes = state => {
-        // show bounding boxes
-        if (DEBUG) {
-            // move player bounding box
-            Object.assign(playerElBB.style, {
-                transform: translate(state.player.left, state.player.top),
-                height: state.player.bottom - state.player.top + "px",
-                width: state.player.right - state.player.left + "px",
-            });
+        // move player bounding box
+        Object.assign(playerElBB.style, {
+            transform: translate(state.player.left, state.player.top),
+            height: state.player.bottom - state.player.top + "px",
+            width: state.player.right - state.player.left + "px",
+        });
 
-            // move obstacle bounding boxes
-            obstacleBBs.forEach((boxes, i) => {
-                // each obstacle is made of many bounding boxes
-                boxes.forEach((el, j) => {
-                    // get current box's state
-                    const ob = state.obstacles[i].boxes[j];
+        // move obstacle bounding boxes
+        // use for loops to avoid gc
+        for (let i = 0; i < obstacleBBs.length; i += 1) {
+            // each obstacle is made of many bounding boxes
+            for (let j = 0; j < obstacleBBs[i].length; j += 1) {
+                // get current box's state
+                const el = obstacleBBs[i][j];
+                const ob = state.obstacles[i].boxes[j];
 
-                    Object.assign(el.style, {
-                        transform: translate(ob.left, ob.top),
-                        height: ob.bottom - ob.top + "px",
-                        width: ob.right - ob.left + "px",
-                    });
+                Object.assign(el.style, {
+                    transform: translate(ob.left, ob.top),
+                    height: ob.bottom - ob.top + "px",
+                    width: ob.right - ob.left + "px",
                 });
-            });
+            }
         }
     };
 
@@ -427,7 +453,10 @@
             // avoids re-rending if nothing has changed
             if (state.score !== lastScore || state.started !== lastStarted) {
                 renderMovement(state);
-                renderBoundingBoxes(state);
+
+                if (DEBUG) {
+                    renderBoundingBoxes(state);
+                }
 
                 // game over when started is false and score is not 0
                 const method = (!state.started && state.score !== 0) ? "remove" : "add";
