@@ -260,11 +260,6 @@
         return state;
     };
 
-    const start = state => {
-        state.started = true;
-        return state;
-    };
-
     const reset = (() => {
         const copy = JSON.stringify(initial);
         let firstRun = true;
@@ -277,9 +272,19 @@
         };
     })();
 
+    const start = state => {
+        if (!state.started) {
+            const clean = reset();
+            clean.started = true;
+            return clean;
+        }
+
+        return state;
+    };
+
     const reducer = (state, action) => {
         switch (action.type) {
-            case "start": return start(reset());
+            case "start": return start(state);
             case "tick": return tick(state, action);
             case "jump": return startJump(state);
             case "cancelJump": return cancelJump(state);
@@ -376,9 +381,11 @@
     /* keyboard events */
     window.addEventListener("keyup", e => {
         switch (e.key) {
-            case "Enter": store.dispatch({ type: "start" }); break;
             case "Escape": store.dispatch({ type: "reset" }); break;
-            case " ": store.dispatch({ type: "cancelJump" }); break;
+            case " ":
+                store.dispatch({ type: "start" });
+                store.dispatch({ type: "cancelJump" });
+                break;
         }
     });
 
@@ -386,6 +393,15 @@
         switch (e.key) {
             case " ": store.dispatch({ type: "jump" }); break;
         }
+    });
+
+    window.addEventListener("mouseup", () => {
+        store.dispatch({ type: "start" });
+        store.dispatch({ type: "cancelJump" });
+    });
+
+    window.addEventListener("mousedown", () => {
+        store.dispatch({ type: "jump" });
     });
 
 
