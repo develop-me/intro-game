@@ -344,6 +344,7 @@
         let lastStarted = null;
 
         return state => {
+            // avoids re-rending if nothing has changed
             if (state.score !== lastScore || state.started !== lastStarted) {
                 renderMovement(state);
                 renderBoundingBoxes(state);
@@ -392,13 +393,13 @@
     window.addEventListener("keyup", e => {
         switch (e.key) {
             case "Escape": store.dispatch({ type: "reset" }); break;
-            case " ": up(); break;
+            case " ": up(e); break;
         }
     });
 
     window.addEventListener("keydown", e => {
         switch (e.key) {
-            case " ": down(); break;
+            case " ": down(e); break;
         }
     });
 
