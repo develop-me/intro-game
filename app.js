@@ -71,6 +71,8 @@
 
 
     /* select elements */
+    const fragment = d.createDocumentFragment(); // doing to be appending a lot of stuff
+
     const sceneEl = d.getElementById("scene");
     sceneEl.style.height = `${height}px`;
     sceneEl.style.width = `${width}px`;
@@ -79,7 +81,7 @@
     const landscapes = clone(d.getElementById("landscape"), landscapePositions);
 
     landscapes.forEach(el => {
-        sceneEl.append(el);
+        fragment.append(el);
         el.style.width = `${landscapeWidth}px`;
     });
 
@@ -87,7 +89,7 @@
     const clouds = clone(d.getElementById("clouds"), cloudsPositions);
 
     clouds.forEach(el => {
-        sceneEl.append(el);
+        fragment.append(el);
         el.style.width = `${cloudsWidth}px`;
     });
 
@@ -113,7 +115,7 @@
     const obstacles = clone(obstacleEl, obstaclePositions);
 
     obstacles.forEach(el => {
-        sceneEl.append(el);
+        fragment.append(el);
 
         Object.assign(el.style, {
             height: `${obstacleHeight}px`,
@@ -129,7 +131,7 @@
 
         if (SHOW_BOUNDING_BOXES) {
             el.classList.add("bounding-box");
-            sceneEl.append(el);
+            fragment.append(el);
         }
 
         return el;
@@ -143,13 +145,15 @@
 
     if (SHOW_BOUNDING_BOXES) {
         playerElBB.classList.add("bounding-box");
-        sceneEl.append(playerElBB);
+        fragment.append(playerElBB);
     }
 
     const scoreEl = d.getElementById("score");
 
     const gameOverEl = d.getElementById("game-over");
     const introEl = d.getElementById("intro");
+
+    sceneEl.append(fragment);
 
 
     /* initial state */
