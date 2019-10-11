@@ -11,6 +11,16 @@
     const gravity = 800; // pixels per second squared
     const initialVelocity = 800; // pixels per second
 
+    /* music */
+    const playMusic = false; // play music - annoying!
+    const tune = [
+        "C4", "_", "_", "G3", "_", "_", "E3", "_", "_",
+        "A3", "_", "B3", "_", "Bb3", "A3", "_",
+        "G3", "E4", "G4", "A4", "_",
+        "F4", "G4", "_", "E4", "_", "C4", "D4", "B3", "_", "_",
+    ]; // notes from C0 - B8, C4 is middle C, C#4 - the semi-tone above middle C
+    const bpm = 240; // notes per minute
+
     /* layout */
     const height = 400; // pixels
     const width = 800; // pixels
@@ -526,4 +536,67 @@
 
     /* getting things started */
     requestAnimationFrame(loop);
+
+
+    /* sound */
+    const freq = 60 / bpm;
+    const A = 440;
+    const rangeValues = range(0, 8).map(val => [val, val - 4]);
+    const noteValues = [
+        ["C", -9],
+        ["C#", -8],
+        ["Db", -8],
+        ["D", -7],
+        ["D#", -6],
+        ["Eb", -6],
+        ["E", -5],
+        ["F", -4],
+        ["F#", -3],
+        ["Gb", -3],
+        ["G", -2],
+        ["G#", -1],
+        ["Ab", -1],
+        ["A", 0],
+        ["A#", 1],
+        ["Bb", 1],
+        ["B", 2],
+    ];
+
+    // map notes to frequencies - e.g A4 = 440, C#2 ~= 17.32
+    const notes = rangeValues.reduce((ob, [range, multiplier]) => noteValues.reduce((ob, [note, semitones]) => ({
+        ...ob,
+        [note + range]: A * Math.pow(2, (semitones + (multiplier * 12)) / 12),
+    }), ob), {});
+
+    // web-audio stuff
+    const context = new (window.AudioContext || window.webkitAudioContext)();
+    const now = context.currentTime;
+
+    let oscillator = context.createOscillator();
+    oscillator.type = "sawtooth";
+    oscillator.connect(context.destination);
+
+    const music = (() => {
+        let seconds = 0;
+
+        return () => {
+            tune.forEach((note, i) => {
+                oscillator.frequency.setValueAtTime(notes[note] || null, now + seconds + (i * freq));
+            });
+
+            seconds += tune.length * freq;
+        };
+    })();
+
+    if (playMusic) {
+        // line up the first two runs of music
+        music();
+        music();
+
+        // add the next run one run before it's needed
+        setInterval(music, tune.length * freq * 1000);
+
+        // start the oscillator
+        oscillator.start(now);
+    }
 })(document);
