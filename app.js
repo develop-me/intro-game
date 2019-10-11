@@ -113,7 +113,7 @@
     // find first svg element in obstacle div
     const obstacleDiv = d.getElementById("obstacle");
 
-    const obstacleEl = obstacleDiv.querySelector("svg");
+    const obstacleEl = obstacleDiv.querySelector("svg") || d.createElement("svg");
     obstacleEl.classList.add("obstacle");
 
     // get the boxes of all relevant svg elements
