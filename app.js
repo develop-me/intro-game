@@ -499,9 +499,86 @@
         };
     })();
 
+    /* music */
+    const freq = 60 / bpm;
+    const A = 440;
+    const rangeValues = range(0, 8).map(val => [val, val - 4]);
+    const noteValues = [
+        ["C", -9],
+        ["C#", -8],
+        ["Db", -8],
+        ["D", -7],
+        ["D#", -6],
+        ["Eb", -6],
+        ["E", -5],
+        ["F", -4],
+        ["F#", -3],
+        ["Gb", -3],
+        ["G", -2],
+        ["G#", -1],
+        ["Ab", -1],
+        ["A", 0],
+        ["A#", 1],
+        ["Bb", 1],
+        ["B", 2],
+    ];
+
+    // map notes to frequencies - e.g A4 = 440, C#2 ~= 17.32
+    const notes = rangeValues.reduce((ob, [range, multiplier]) => noteValues.reduce((ob, [note, semitones]) => ({
+        ...ob,
+        [note + range]: A * Math.pow(2, (semitones + (multiplier * 12)) / 12),
+    }), ob), {});
+
+    const createOscillator = context => {
+        const oscillator = context.createOscillator();
+        oscillator.type = "sawtooth";
+        oscillator.connect(context.destination);
+        return oscillator;
+    };
+
+    const audioPlayer = (() => {
+        let inited = false;
+        let context = null;
+        let oscillator = null;
+        let now = null;
+
+        const music = (() => {
+            let seconds = 0;
+
+            return () => {
+                tune.forEach((note, i) => {
+                    oscillator.frequency.setValueAtTime(notes[note] || null, now + seconds + (i * freq));
+                });
+
+                seconds += tune.length * freq;
+            };
+        })();
+
+        return () => {
+            if (!playMusic || inited) {
+                return;
+            }
+
+            inited = true;
+            context = new (window.AudioContext || window.webkitAudioContext)();
+            oscillator = createOscillator(context);
+            now = context.currentTime;
+
+            // line up the first two runs of music
+            music();
+            music();
+
+            // add the next run one run before it's needed
+            setInterval(music, tune.length * freq * 1000);
+
+            // start the oscillator
+            oscillator.start(now);
+        };
+    })();
 
     /* event handlers */
     const up = () => {
+        audioPlayer();
         store.dispatch({ type: "start" });
         store.dispatch({ type: "cancelJump" });
     };
@@ -536,67 +613,4 @@
 
     /* getting things started */
     requestAnimationFrame(loop);
-
-
-    /* sound */
-    const freq = 60 / bpm;
-    const A = 440;
-    const rangeValues = range(0, 8).map(val => [val, val - 4]);
-    const noteValues = [
-        ["C", -9],
-        ["C#", -8],
-        ["Db", -8],
-        ["D", -7],
-        ["D#", -6],
-        ["Eb", -6],
-        ["E", -5],
-        ["F", -4],
-        ["F#", -3],
-        ["Gb", -3],
-        ["G", -2],
-        ["G#", -1],
-        ["Ab", -1],
-        ["A", 0],
-        ["A#", 1],
-        ["Bb", 1],
-        ["B", 2],
-    ];
-
-    // map notes to frequencies - e.g A4 = 440, C#2 ~= 17.32
-    const notes = rangeValues.reduce((ob, [range, multiplier]) => noteValues.reduce((ob, [note, semitones]) => ({
-        ...ob,
-        [note + range]: A * Math.pow(2, (semitones + (multiplier * 12)) / 12),
-    }), ob), {});
-
-    // web-audio stuff
-    const context = new (window.AudioContext || window.webkitAudioContext)();
-    const now = context.currentTime;
-
-    let oscillator = context.createOscillator();
-    oscillator.type = "sawtooth";
-    oscillator.connect(context.destination);
-
-    const music = (() => {
-        let seconds = 0;
-
-        return () => {
-            tune.forEach((note, i) => {
-                oscillator.frequency.setValueAtTime(notes[note] || null, now + seconds + (i * freq));
-            });
-
-            seconds += tune.length * freq;
-        };
-    })();
-
-    if (playMusic) {
-        // line up the first two runs of music
-        music();
-        music();
-
-        // add the next run one run before it's needed
-        setInterval(music, tune.length * freq * 1000);
-
-        // start the oscillator
-        oscillator.start(now);
-    }
 })(document);
