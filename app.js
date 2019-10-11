@@ -12,7 +12,7 @@
     const initialVelocity = 800; // pixels per second
 
     /* music */
-    const playMusic = false; // play music - annoying!
+    const playMusic = new URLSearchParams(window.location.search).get("annoy") === "true"; // play music - annoying!
     const tune = [
         "C4", "_", "_", "G3", "_", "_", "E3", "_", "_",
         "A3", "_", "B3", "_", "Bb3", "A3", "_",
