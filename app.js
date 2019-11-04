@@ -13,11 +13,25 @@
 
     /* music */
     const playMusic = new URLSearchParams(window.location.search).get("annoy") === "true"; // play music - annoying!
-    const tune = [
-        "C4", "_", "_", "G3", "_", "_", "E3", "_", "_",
-        "A3", "_", "B3", "_", "Bb3", "A3", "_",
-        "G3", "E4", "G4", "A4", "_",
-        "F4", "G4", "_", "E4", "_", "C4", "D4", "B3", "_", "_",
+    const tune = [ // one array per line, each line loops independently
+        [ // top line
+            "C5", "_", "_", "G4", "_", "_", "E4", "_", "_",
+            "A4", "_", "B4", "_", "Bb4", "A4", "_",
+            "G4", "E5", "G5", "A5", "_",
+            "F5", "G5", "_", "E5", "_", "C5", "D5", "B4", "_", "_",
+        ],
+        [ // middle line
+            "E4", "_", "_", "C4", "_", "_", "G3", "_", "_",
+            "C4", "_", "D4", "_", "Db4", "C4", "_",
+            "C4", "G4", "B4", "C5", "_",
+            "A4", "B4", "_", "A4", "_", "E4", "F4", "D4", "_", "_",
+        ],
+        [ // bass line
+            "G3", "_", "_", "E3", "_", "_", "C3", "_", "_",
+            "F3", "_", "G3", "_", "Gb3", "F3", "_",
+            "E3", "C4", "E4", "F4", "_",
+            "D4", "E4", "_", "C4", "_", "A3", "B3", "G3", "_", "_",
+        ],
     ]; // notes from C0 - B8, C4 is middle C, C#4 - the semi-tone above middle C
     const bpm = 240; // notes per minute
 
@@ -539,40 +553,47 @@
     const audioPlayer = (() => {
         let inited = false;
         let context = null;
-        let oscillator = null;
         let now = null;
 
-        const music = (() => {
+        const music = (oscillator, part) => {
             let seconds = 0;
 
             return () => {
-                tune.forEach((note, i) => {
+                part.forEach((note, i) => {
                     oscillator.frequency.setValueAtTime(notes[note] || null, now + seconds + (i * freq));
                 });
 
-                seconds += tune.length * freq;
+                seconds += part.length * freq;
             };
-        })();
+        };
 
         return () => {
-            if (!playMusic || inited) {
+            if (!playMusic || inited || tune.length === 0) {
                 return;
             }
 
             inited = true;
             context = new (window.AudioContext || window.webkitAudioContext)();
-            oscillator = createOscillator(context);
             now = context.currentTime;
 
-            // line up the first two runs of music
-            music();
-            music();
-
-            // add the next run one run before it's needed
-            setInterval(music, tune.length * freq * 1000);
-
             // start the oscillator
-            oscillator.start(now);
+            tune.forEach(part => {
+                if (part.length === 0) {
+                    return;
+                }
+
+                let oscillator = createOscillator(context);
+                let metronome = music(oscillator, part);
+
+                // line up the first two runs of music
+                metronome();
+                metronome();
+
+                // add the next run one run before it's needed
+                setInterval(metronome, part.length * freq * 1000);
+
+                oscillator.start(now);
+            });
         };
     })();
 
