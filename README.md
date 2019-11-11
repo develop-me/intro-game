@@ -24,7 +24,7 @@ Remember the cloud area is 250×200. If you're not sure where to start then just
 
 - Set height to `100`
 - Set width to `100`
-- Set color to transparent ()
+- Set color to transparent
 
 Once you're happy with it:
 
