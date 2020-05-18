@@ -1,5 +1,8 @@
 # Workshop Script
 
+- [Slides](https://docs.google.com/presentation/d/1scHVUz-JNkDgcf9ZQ39wUlkf2JneH69oYjXM_h2J4F0/edit)
+
+- **Pin screen if can't see code**
 - Make sure resources page is open: [developme.training/cf](developme.training/cf)
 - Demo: [develop-me.github.io/intro-game/](develop-me.github.io/intro-game/)
 - Demonstrate forking the template: [https://codepen.io/smallhadroncollider/pen/wvvaePq](https://codepen.io/smallhadroncollider/pen/wvvaePq)
@@ -8,28 +11,24 @@
 ## Intro
 
 - The tech
-    - HTML & SVGs: for objects
-    - CSS: for styling
-    - JS: for interactivity
-- Look at:
-    - SVG: the player (line 27)
-    - CSS: the score (line 12)
-    - JS: collision detection (line 336)
+    - HTML & SVGs: for objects - the player (line 27)
+    - CSS: for styling - the score (line 12)
+    - JS: for interactivity - collision detection (line 336)
 
 ## Graphics
 
-- Coordinate system (diagram):
+- **Slide**: Coordinate system
     - `x`: distance from left
     - `y`: distance from *top*
     - `z`: depth
-- Show the various layers of the scene by editing `.intro` CSS (line 69)
-- Repeating elements with JS (delete JS to see what happens)
-- The scene `<div>` wraps the game, hides things (`overflow: visible`)
-- Pixel vs Vector graphics
+- **Slide**: Show the various layers of the scene by editing `.intro` CSS (line 69)
+- **Slide**: Repeating elements with JS (delete JS to see what happens)
+- **Slide**: The scene `<div>` wraps the game, hides things (`overflow: visible`)
+- **Slide**: Pixel vs Vector graphics
     - GIF, JPG, PNG: don't scale well, needed for photos - every pixel is unique
     - "Scalable Vector Graphic": infinite scaling, great for illustrations/logos
 - Clouds
-    - Draw a cloud from three circles
+    - **Slide**: Draw a cloud from three circles
     - Look at the `viewbox`: the canvas size
     - One `<g>` (group) per cloud
     - Three `<circle>` per cloud
@@ -62,11 +61,11 @@
 - Collision detection function called 60 times a second for every obstacle
 - Gets the position of each obstacle and the position of the player
 - Have they collided?
-- Draw a diagram of two complex shapes
-- Perfect collision detection impractical
-- Draw bounding boxes
-- When do things collide? When they overlap
-- Draw diagram:
+- **Slide**: Draw a diagram of two complex shapes
+- **Slide**: Perfect collision detection impractical
+- **Slide**: Draw bounding boxes
+- **Slide**: When do things collide? When they overlap
+- **Slide**: Draw diagram:
     - a’s left is less than b’s right
     - a’s right is greater than b’s left
     - a’s top is less than b’s bottom
