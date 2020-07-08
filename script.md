@@ -3,9 +3,9 @@
 - [Slides](https://docs.google.com/presentation/d/1scHVUz-JNkDgcf9ZQ39wUlkf2JneH69oYjXM_h2J4F0/edit)
 
 - **Pin screen if can't see code**
-- Make sure resources page is open: [developme.training/cf](developme.training/cf)
-- Demo: [develop-me.github.io/intro-game/](develop-me.github.io/intro-game/)
-- Demonstrate forking the template: [https://codepen.io/smallhadroncollider/pen/wvvaePq](https://codepen.io/smallhadroncollider/pen/wvvaePq)
+- Make sure resources page is open: [developme.tech/cf](https://developme.tech/cf)
+- Demo: [develop-me.github.io/intro-game/](https://develop-me.github.io/intro-game/)
+- Demonstrate forking the template: [codepen.io/developmark/pen/JjGvXjY](https://codepen.io/developmark/pen/JjGvXjY)
 - **Work from a fork!**
 
 ## Intro
