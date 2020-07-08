@@ -29,6 +29,9 @@ Remember the cloud area is 250×200. If you're not sure where to start then just
 Once you're happy with it:
 
 - View -> Source... (Ctrl/Cmd + U)
+- Paste into CodePen HTML `<!-- YOUR OBSTACLE HERE -->`
+- Remove the first `<g>` tag (lines 19-26)
+- Remote the `<title>Layer 1</title>` tag
 
 
 ## CSS (Cascading Style Sheets)
